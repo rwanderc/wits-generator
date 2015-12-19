@@ -28,7 +28,7 @@ package com.wandercosta.witsgenerator.generator;
  *
  * @author Wander Costa (www.wandercosta.com)
  */
-public class WitsGenerator extends Thread {
+public class WitsGenerator {
 
     private final WitsLineGenerator lineGenerator;
     private final int records;

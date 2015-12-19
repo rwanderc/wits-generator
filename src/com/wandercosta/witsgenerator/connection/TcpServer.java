@@ -28,7 +28,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * This is the TCP Server that will open the port for the client to get
+ * This is the TCP Socket Server that will open the port for the client to get
  * connected. It only accepts one client connected.
  *
  * @author Wander Costa (www.wandercosta.com)

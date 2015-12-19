@@ -27,8 +27,8 @@ import com.wandercosta.witsgenerator.generator.WitsGenerator;
 import com.wandercosta.witsgenerator.connection.TcpServer;
 
 /**
- * This class is responsible for starting the TCP Server thread and write to its
- * clients from time to time, according to the frequency configured.
+ * This class is responsible for starting the TCP Server thread and writing to
+ * its clients from time to time, according to the frequency configured.
  *
  * @author Wander Costa (www.wandercosta.com)
  */

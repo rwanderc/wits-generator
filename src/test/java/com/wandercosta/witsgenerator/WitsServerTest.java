@@ -1,8 +1,8 @@
 package com.wandercosta.witsgenerator;
 
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.times;
 
 import com.wandercosta.witsgenerator.connection.TcpServer;
 import com.wandercosta.witsgenerator.generator.WitsGenerator;
@@ -24,14 +24,14 @@ public class WitsServerTest {
 
     private static final String NULL_TCPSERVER = "TcpServer must be provided.";
     private static final String NULL_WITSGENERATOR = "WitsGenerator must be provided.";
-    private static final String WRONG_PORT = "Port must be provided and be greater than 0.";
+    private static final String WRONG_PORT = "Port must be between 1 and 65535, inclusive.";
     private static final String WRONG_FREQUENCY
             = "Frequency must be provided and be greater than 0.";
-    private static final String WRONG_RECORDS = "Records must be between 1 and 99 inclusive.";
-    private static final String WRONG_ITEMS = "Items must be between 1 and 99 inclusive.";
+    private static final String WRONG_RECORDS = "Records must be between 1 and 99, inclusive.";
+    private static final String WRONG_ITEMS = "Items must be between 1 and 99, inclusive.";
 
-    private static final int DUMMY_PORT = 10100;
-    private static final int DUMMY_FREQUENCY = 1000;
+    private static final int DUMMY_PORT = 10_100;
+    private static final int DUMMY_FREQUENCY = 1_000;
     private static final int DUMMY_RECORDS = 5;
     private static final int DUMMY_ITEMS = 10;
 

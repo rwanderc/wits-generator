@@ -1,7 +1,7 @@
 package com.wandercosta.witsgenerator;
 
-import com.wandercosta.witsgenerator.generator.WitsGenerator;
 import com.wandercosta.witsgenerator.connection.TcpServer;
+import com.wandercosta.witsgenerator.generator.WitsGenerator;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -15,18 +15,19 @@ public class WitsServer {
 
     private static final String NULL_TCPSERVER = "TcpServer must be provided.";
     private static final String NULL_WITSGENERATOR = "WitsGenerator must be provided.";
-    private static final String WRONG_PORT = "Port must be provided and be greater than 0.";
+    private static final String WRONG_PORT = "Port must be between 1 and 65535, inclusive.";
     private static final String WRONG_FREQUENCY
             = "Frequency must be provided and be greater than 0.";
-    private static final String WRONG_RECORDS = "Records must be between 1 and 99 inclusive.";
-    private static final String WRONG_ITEMS = "Items must be between 1 and 99 inclusive.";
+    private static final String WRONG_RECORDS = "Records must be between 1 and 99, inclusive.";
+    private static final String WRONG_ITEMS = "Items must be between 1 and 99, inclusive.";
 
     private final TcpServer server;
     private final WitsGenerator generator;
     private final int records;
     private final int items;
     private final int frequency;
-    private boolean keepRunning;
+    
+    private transient boolean keepRunning;
 
     public WitsServer(TcpServer server, WitsGenerator generator, int port, int frequency,
             int records, int items) {
@@ -43,6 +44,7 @@ public class WitsServer {
         keepRunning = true;
         server.start();
 
+        System.out.println("WitsServer started!");
         long spentTime;
         while (keepRunning) {
             spentTime = System.currentTimeMillis();
@@ -57,8 +59,11 @@ public class WitsServer {
     }
 
     public void stop() {
-        keepRunning = false;
-        server.stopServer();
+        if (keepRunning) {
+            keepRunning = false;
+            server.stopServer();
+            System.out.println("WitsServer stopped!");
+        }
     }
 
     private void validate(TcpServer server, WitsGenerator generator, int port, int frequency,

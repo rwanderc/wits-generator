@@ -22,7 +22,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class TcpServerTest {
 
-    private static final int DUMMY_PORT = 9090;
+    private static final int DUMMY_PORT = 9_090;
     private static final String DUMMY_DATA = "Dummy data";
 
     @Mock

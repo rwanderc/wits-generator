@@ -13,8 +13,8 @@ public class WitsLineGenerator {
     private static final String WRONG_RECORD = "Record number must be greater than 0.";
     private static final String WRONG_ITEM = "Item number must be greater than 0.";
 
-    private static final float MAX_VALUE = 10000;
-    private static final float MIN_VALUE = -10000;
+    private static final float MAX_VALUE = 10_000;
+    private static final float MIN_VALUE = -10_000;
 
     private final Random random = new Random();
     private final float min;

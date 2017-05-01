@@ -62,12 +62,7 @@ public class Main {
     }
 
     private static void startShutdownHook(WitsServer witsServer) {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdown(witsServer)));
-    }
-
-    private static void shutdown(WitsServer witsServer) {
-        System.out.println("\nShutting down...");
-        witsServer.stop();
+        Runtime.getRuntime().addShutdownHook(new Thread(witsServer::stop));
     }
 
 }

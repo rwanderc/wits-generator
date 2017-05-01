@@ -16,11 +16,11 @@ public class Main {
 
     public static void main(String... args) throws IOException {
         if (Arrays.asList(args).contains("--help")) {
-            exit(0, help());
+            exit(false, help());
         }
 
         if (args == null || args.length != 4) {
-            exit(1, "Wrong input: 4 parameters are expected.");
+            exit(true, "Wrong input: 4 parameters are expected.");
         }
 
         try {
@@ -38,15 +38,15 @@ public class Main {
 
             witsServer.start();
         } catch (NumberFormatException ex) {
-            exit(1, "Wrong input: " + ex.getMessage());
+            exit(true, "Wrong input: " + ex.getMessage());
         } catch (IOException ex) {
-            exit(1, "Error in the stream: " + ex.getMessage());
+            exit(true, "Error in the stream: " + ex.getMessage());
         }
     }
 
-    private static void exit(int value, String message) {
+    private static void exit(boolean failure, String message) {
         System.out.println(message);
-        System.exit(value);
+        System.exit(failure ? 1 : 0);
     }
 
     public static String help() {

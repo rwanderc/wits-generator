@@ -20,7 +20,7 @@ public class Main {
         }
 
         if (args == null || args.length != 4) {
-            exit(true, "Wrong input: 4 parameters are expected.");
+            exit(true, "Wrong input: 4 parameters are expected or --help.");
         }
 
         try {
@@ -50,7 +50,7 @@ public class Main {
     }
 
     public static String help() {
-        return "Usage: java -jar WitsGenerator.jar [port] [frequency] [records] [items]\n"
+        return "Usage: java -jar wits-generator-1.1.jar [port] [frequency] [records] [items]\n"
                 + "Creates a socket server and transmit Wits randomic data from time\n"
                 + "to time. Only allows ONE single client connected.\n"
                 + "\n"
@@ -58,7 +58,7 @@ public class Main {
                 + "  port\t\tThe port to run the socket Server\n"
                 + "  frequency\tThe frequency, in seconds, of the data generation\n"
                 + "  records\tThe amount of records to be transmitted\n"
-                + "  items\t\tThe amount of items to be transmitted in each reacord";
+                + "  items\t\tThe amount of items to be transmitted in each record";
     }
 
     private static void startShutdownHook(WitsServer witsServer) {

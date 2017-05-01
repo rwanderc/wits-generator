@@ -3,8 +3,8 @@ package com.wandercosta.witsgenerator.generator;
 import java.util.Random;
 
 /**
- * Responsible for creating each data line. It uses a random interval between -10000 and 10000 to generate the data, and
- * does not guarantee any trend.
+ * Responsible for creating each data line. It uses a random interval between -10000 and 10000 to
+ * generate the data, and does not guarantee any trend.
  *
  * @author Wander Costa (www.wandercosta.com)
  */
@@ -33,16 +33,9 @@ public class WitsLineGenerator {
         validateParam(record, WRONG_RECORD);
         validateParam(item, WRONG_ITEM);
 
-        String recordStr = String.valueOf(record);
-        String itemStr = String.valueOf(item);
+        String recordStr = ensureTwoChars(String.valueOf(record));
+        String itemStr = ensureTwoChars(String.valueOf(item));
         String valueStr = String.valueOf(randomValue());
-
-        if (recordStr.length() == 1) {
-            recordStr = "0".concat(recordStr);
-        }
-        if (itemStr.length() == 1) {
-            itemStr = "0".concat(itemStr);
-        }
 
         return recordStr.concat(itemStr).concat(valueStr);
     }
@@ -51,6 +44,12 @@ public class WitsLineGenerator {
         if (value <= 0 || value >= 100) {
             throw new IllegalArgumentException(message);
         }
+    }
+
+    private String ensureTwoChars(String value) {
+        return value.length() == 1
+                ? "0".concat(value)
+                : value;
     }
 
     private float randomValue() {

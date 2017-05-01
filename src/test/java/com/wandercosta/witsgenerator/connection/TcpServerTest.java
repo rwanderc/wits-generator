@@ -1,5 +1,6 @@
 package com.wandercosta.witsgenerator.connection;
 
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -37,7 +38,7 @@ public class TcpServerTest {
     private OutputStream outputStream;
 
     @Test
-    public void shouldRunAndWrite() throws IOException {
+    public void shouldRunWriteAndStop() throws IOException {
         when(serverSocketFactory.createServerSocket(DUMMY_PORT)).thenReturn(serverSocket);
         when(serverSocket.accept()).thenReturn(clientSocket);
         when(clientSocket.getOutputStream()).thenReturn(outputStream);
@@ -51,25 +52,50 @@ public class TcpServerTest {
         when(clientSocket.isClosed()).thenReturn(false);
         server.writeln(DUMMY_DATA);
         verify(outputStream).write(DUMMY_DATA.concat("\n").getBytes());
+        
+        server.stopServer();
+    }
+    
+    @Test
+    public void shouldFailDuringStopOfServer() throws IOException {
+        when(serverSocketFactory.createServerSocket(DUMMY_PORT)).thenReturn(serverSocket);
+        doThrow(new IOException()).when(serverSocket).close();
+        
+        TcpServer tcpServer = new TcpServer(serverSocketFactory, DUMMY_PORT);
+        tcpServer.run();
+        tcpServer.stopServer();
+        
+        verify(serverSocket).close();
+    }
+    @Test
+    public void shouldFailDuringStopOfClient() throws IOException {
+        when(serverSocketFactory.createServerSocket(DUMMY_PORT)).thenReturn(serverSocket);
+        when(serverSocket.accept()).thenReturn(clientSocket);
+        doThrow(new IOException()).when(clientSocket).close();
+        
+        TcpServer tcpServer = new TcpServer(serverSocketFactory, DUMMY_PORT);
+        tcpServer.run();
+        tcpServer.stopServer();
+        
+        verify(serverSocket).close();
+        verify(clientSocket).close();
     }
 
     @Test(expected = RuntimeException.class)
-    public void shouldFailToRunWithIOExceptionWrapperInRuntimeException() throws IOException {
-        when(serverSocketFactory.createServerSocket(DUMMY_PORT)).thenThrow(new IOException("mocked"));
+    public void shouldFailToRunWithIOExceptionWrappedInRuntimeException() throws IOException {
+        when(serverSocketFactory.createServerSocket(DUMMY_PORT))
+                .thenThrow(new IOException("mocked"));
         new TcpServer(serverSocketFactory, DUMMY_PORT).run();
     }
 
     @Test(expected = NullPointerException.class)
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void shouldFailToInstanciateWithNullFactory() {
         new TcpServer(null, DUMMY_PORT);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void shouldFailToInstanciateWithNullPort() {
-        new TcpServer(serverSocketFactory, null);
-    }
-
     @Test(expected = IllegalArgumentException.class)
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void shouldFailToInstanciateWithWrongPort() {
         new TcpServer(serverSocketFactory, 0);
     }

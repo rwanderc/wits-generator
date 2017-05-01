@@ -19,24 +19,30 @@ public class Main {
 
         if (args == null || args.length != 4) {
             error = true;
-            System.err.println("Wrong input!");
+            System.err.println("Wrong input: 4 parameters are expected.");
         }
 
         if (!error) {
             try {
-                int port = Integer.valueOf(args[0]);
-                int frequency = Integer.valueOf(args[1]);
-                int records = Integer.valueOf(args[2]);
-                int items = Integer.valueOf(args[3]);
+                int port = Integer.parseInt(args[0]);
+                int freq = Integer.parseInt(args[1]);
+                int records = Integer.parseInt(args[2]);
+                int items = Integer.parseInt(args[3]);
 
+                WitsGenerator gen = new WitsGenerator(new WitsLineGenerator());
                 ServerSocketFactory serverSocketFactory = ServerSocketFactory.getDefault();
-                TcpServer server = new TcpServer(serverSocketFactory, port);
-                WitsGenerator generator = new WitsGenerator(new WitsLineGenerator());
-                WitsServer wits = new WitsServer(server, generator, port, frequency, records, items);
-                wits.start();
+                TcpServer tcpServer = new TcpServer(serverSocketFactory, port);
+                WitsServer witsServer = new WitsServer(tcpServer, gen, port, freq, records, items);
+
+                startShutdownHook(witsServer);
+
+                witsServer.start();
             } catch (NumberFormatException ex) {
                 error = true;
-                System.err.println("Wrong input!");
+                System.err.println("Wrong input: " + ex.getMessage());
+            } catch (IOException ex) {
+                error = true;
+                System.err.println("Error in the stream: " + ex.getMessage());
             }
         }
 
@@ -56,6 +62,15 @@ public class Main {
                 + "  frequency\tThe frequency, in seconds, of the data generation\n"
                 + "  records\tThe amount of records to be transmitted\n"
                 + "  items\t\tThe amount of items to be transmitted in each reacord";
+    }
+
+    private static void startShutdownHook(WitsServer witsServer) {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdown(witsServer)));
+    }
+
+    private static void shutdown(WitsServer witsServer) {
+        System.out.println("\nShutting down...");
+        witsServer.stop();
     }
 
 }

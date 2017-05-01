@@ -15,41 +15,38 @@ import javax.net.ServerSocketFactory;
 public class Main {
 
     public static void main(String... args) throws IOException {
-        boolean error = false;
+        if (Arrays.asList(args).contains("--help")) {
+            exit(0, help());
+        }
 
         if (args == null || args.length != 4) {
-            error = true;
-            System.err.println("Wrong input: 4 parameters are expected.");
+            exit(1, "Wrong input: 4 parameters are expected.");
         }
 
-        if (!error) {
-            try {
-                int port = Integer.parseInt(args[0]);
-                int freq = Integer.parseInt(args[1]);
-                int records = Integer.parseInt(args[2]);
-                int items = Integer.parseInt(args[3]);
+        try {
+            int port = Integer.parseInt(args[0]);
+            int freq = Integer.parseInt(args[1]);
+            int records = Integer.parseInt(args[2]);
+            int items = Integer.parseInt(args[3]);
 
-                WitsGenerator gen = new WitsGenerator(new WitsLineGenerator());
-                ServerSocketFactory serverSocketFactory = ServerSocketFactory.getDefault();
-                TcpServer tcpServer = new TcpServer(serverSocketFactory, port);
-                WitsServer witsServer = new WitsServer(tcpServer, gen, port, freq, records, items);
+            WitsGenerator gen = new WitsGenerator(new WitsLineGenerator());
+            ServerSocketFactory serverSocketFactory = ServerSocketFactory.getDefault();
+            TcpServer tcpServer = new TcpServer(serverSocketFactory, port);
+            WitsServer witsServer = new WitsServer(tcpServer, gen, port, freq, records, items);
 
-                startShutdownHook(witsServer);
+            startShutdownHook(witsServer);
 
-                witsServer.start();
-            } catch (NumberFormatException ex) {
-                error = true;
-                System.err.println("Wrong input: " + ex.getMessage());
-            } catch (IOException ex) {
-                error = true;
-                System.err.println("Error in the stream: " + ex.getMessage());
-            }
+            witsServer.start();
+        } catch (NumberFormatException ex) {
+            exit(1, "Wrong input: " + ex.getMessage());
+        } catch (IOException ex) {
+            exit(1, "Error in the stream: " + ex.getMessage());
         }
+    }
 
-        if (error || Arrays.asList(args).contains("--help")) {
-            System.out.println(help());
-            System.exit(1);
-        }
+    private static void exit(int value, String message) {
+        System.out.println(message);
+        System.exit(value);
     }
 
     public static String help() {

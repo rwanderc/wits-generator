@@ -51,7 +51,7 @@ public class Main {
 
     public static String help() {
         return "Usage: java -jar wits-generator-1.1.jar [port] [frequency] [records] [items]\n"
-                + "Creates a socket server and transmit random Wits data from time\n"
+                + "Creates a socket server and transmits random Wits data from time\n"
                 + "to time. Only allows ONE single client connected.\n"
                 + "\n"
                 + "Mandatory arguments\n"
